@@ -1,10 +1,10 @@
 {
   "name": "Croissant77",
   "short_name": "Croissant77",
-  "description": "Мой сайт на Croissant77",
+  "description": "Ваш сайт Croissant77",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f093fb",
+  "background_color": "#667eea",
   "theme_color": "#f5576c",
   "icons": [
     {

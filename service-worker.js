@@ -1,18 +1,10 @@
-// Простой Service Worker для PWA
-const CACHE_NAME = 'croissant77-pwa-v1';
-
+// Минимальный Service Worker для PWA
 self.addEventListener('install', event => {
-    console.log('[PWA Croissant77] Установлен');
-    self.skipWaiting();
+  self.skipWaiting();
+  console.log('PWA установлен');
 });
 
 self.addEventListener('activate', event => {
-    console.log('[PWA Croissant77] Активирован');
-    event.waitUntil(self.clients.claim());
-});
-
-// Для PWA не кешируем, только редирект
-self.addEventListener('fetch', event => {
-    // Можно добавить кеширование статики позже
-    return;
+  event.waitUntil(self.clients.claim());
+  console.log('PWA активирован');
 });

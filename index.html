@@ -3,216 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Croissant77</title>
+    <title>Croissant77 - Ваш сайт</title>
     
-    <!-- НАША иконка - ВСЕГДА -->
-    <link rel="icon" href="icons/icon192.png" type="image/png" id="permaFavicon">
-    <link rel="shortcut icon" href="icons/icon192.png">
+    <!-- НАША иконка ВСЕГДА -->
+    <link rel="icon" href="icons/icon192.png" type="image/png">
     <link rel="apple-touch-icon" href="icons/icon192.png">
     
+    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#f5576c">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; }
         
-        #siteContainer {
-            width: 100%;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100vh;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
         }
         
-        iframe {
-            width: 100%;
-            height: 100%;
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        #appLink {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 16px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
             border: none;
+            cursor: pointer;
+            margin-top: 20px;
         }
         
-        /* Overlay поверх iframe для favicon защиты */
-        #faviconProtector {
-            position: fixed;
-            top: -100px;
-            left: -100px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
+        #appLink:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .installed {
+            background: #4CD964 !important;
+            color: white !important;
         }
     </style>
 </head>
 <body>
-    <!-- Контейнер для сайта -->
-    <div id="siteContainer">
-        <iframe 
-            src="about:blank"
-            id="siteFrame"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            title="Croissant77">
-        </iframe>
+    <div class="container">
+        <h1>Croissant77</h1>
+        <p>Нажмите кнопку ниже для открытия сайта</p>
+        
+        <button id="appLink">
+            🔗 Открыть Croissant77
+        </button>
+        
+        <p style="margin-top: 30px; font-size: 14px; opacity: 0.7;">
+            Иконка приложения: наша<br>
+            Сайт откроется в браузере
+        </p>
     </div>
-    
-    <!-- Невидимый элемент для блокировки favicon изменения -->
-    <div id="faviconProtector"></div>
 
     <script>
-        // 1. ЯДЕРНАЯ БЛОКИРОВКА FAVICON ИЗМЕНЕНИЙ
-        function nuclearFaviconLock() {
-            // Блокируем ВСЕ попытки изменить favicon
-            const originalHeadAppendChild = document.head.appendChild;
-            const originalHeadInsertBefore = document.head.insertBefore;
-            const originalHeadReplaceChild = document.head.replaceChild;
-            
-            document.head.appendChild = function(node) {
-                if (node.rel && node.rel.includes('icon')) {
-                    console.log('🚫 Блокирована попытка изменить favicon через appendChild');
-                    return node; // Игнорируем
-                }
-                return originalHeadAppendChild.call(this, node);
-            };
-            
-            document.head.insertBefore = function(newNode, referenceNode) {
-                if (newNode.rel && newNode.rel.includes('icon')) {
-                    console.log('🚫 Блокирована попытка изменить favicon через insertBefore');
-                    return newNode;
-                }
-                return originalHeadInsertBefore.call(this, newNode, referenceNode);
-            };
-            
-            // Также мониторим изменения в DOM
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeName === 'LINK' && 
-                            node.rel && 
-                            (node.rel.includes('icon') || node.rel.includes('Icon'))) {
-                            console.log('🚫 Обнаружена и удалена иконка Craftum');
-                            node.remove();
-                            
-                            // Восстанавливаем нашу
-                            const ourIcon = document.createElement('link');
-                            ourIcon.rel = 'icon';
-                            ourIcon.href = 'icons/icon192.png';
-                            ourIcon.type = 'image/png';
-                            document.head.appendChild(ourIcon);
-                        }
-                    });
-                });
-            });
-            
-            observer.observe(document.head, { childList: true, subtree: true });
-            
-            // Периодическое восстановление нашей иконки
-            setInterval(() => {
-                const icons = document.querySelectorAll('link[rel*="icon"]');
-                let hasOurIcon = false;
-                
-                icons.forEach(icon => {
-                    if (icon.href.includes('icon192.png') || icon.href.includes('my-site-pwa')) {
-                        hasOurIcon = true;
-                    } else {
-                        icon.remove(); // Удаляем чужую
-                    }
-                });
-                
-                if (!hasOurIcon) {
-                    const newIcon = document.createElement('link');
-                    newIcon.rel = 'icon';
-                    newIcon.href = 'icons/icon192.png';
-                    newIcon.type = 'image/png';
-                    document.head.appendChild(newIcon);
-                    console.log('🔄 Восстановлена наша иконка');
-                }
-            }, 500);
-            
-            console.log('🔒 Ядерная блокировка favicon активирована');
-        }
-        
-        // 2. ЗАГРУЗКА САЙТА В IFRAME
-        function loadSite() {
-            const frame = document.getElementById('siteFrame');
-            
-            // Сначала загружаем страницу-посредник для блокировки Craftum JS
-            const proxyHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <base href="https://croissant77.ru/">
-                    <script>
-                        // Блокируем Craftum scripts которые меняют favicon
-                        const blockedScripts = [
-                            'favicon', 'icon', 'craftum-favicon',
-                            '/assets/', '/static/', '/js/'
-                        ];
-                        
-                        const originalCreateElement = document.createElement;
-                        document.createElement = function(tagName) {
-                            const element = originalCreateElement.call(document, tagName);
-                            
-                            if (tagName.toLowerCase() === 'script') {
-                                element.addEventListener('load', function() {
-                                    // Проверяем не favicon ли это меняет
-                                    if (this.src && blockedScripts.some(s => this.src.includes(s))) {
-                                        console.log('Блокирован скрипт:', this.src);
-                                        // Не даем ему работать
-                                    }
-                                });
-                            }
-                            
-                            return element;
-                        };
-                    <\/script>
-                </head>
-                <body>
-                    <iframe 
-                        src="https://croissant77.ru/page2" 
-                        style="width:100%; height:100vh; border:none;"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups">
-                    </iframe>
-                </body>
-                </html>
-            `;
-            
-            frame.srcdoc = proxyHtml;
-            
-            console.log('🌐 Сайт загружен с защитой от favicon перехвата');
-        }
-        
-        // 3. PWA РЕГИСТРАЦИЯ
+        // 1. PWA РЕГИСТРАЦИЯ (наша иконка в манифесте)
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('✅ PWA зарегистрирован'))
-                .catch(err => console.log('❌ PWA ошибка:', err));
+                .then(() => console.log('✅ PWA с нашей иконкой'))
+                .catch(err => console.log('❌ Ошибка PWA:', err));
         }
         
-        // 4. ЗАПУСК
-        nuclearFaviconLock(); // Блокируем изменения
-        setTimeout(loadSite, 100); // Загружаем сайт
-        
-        // 5. ДОПОЛНИТЕЛЬНАЯ ЗАЩИТА - ПЕРЕЗАГРУЗКА СТРАНИЦЫ ПРИ ПОПЫТКЕ СМЕНИТЬ FAVICON
-        let faviconChangeAttempts = 0;
-        
-        const checkFavicon = setInterval(() => {
-            const icons = document.querySelectorAll('link[rel*="icon"]');
-            let hasCraftumIcon = false;
+        // 2. ОТКРЫТИЕ САЙТА ПО КЛИКУ
+        document.getElementById('appLink').addEventListener('click', function() {
+            // Открываем сайт в новой вкладке
+            window.open('https://croissant77.ru/page2', '_blank');
             
-            icons.forEach(icon => {
-                if (icon.href && 
-                   (icon.href.includes('craftum') || 
-                    (!icon.href.includes('icon192.png') && 
-                     !icon.href.includes('my-site-pwa')))) {
-                    hasCraftumIcon = true;
-                    icon.remove();
-                    faviconChangeAttempts++;
-                    
-                    if (faviconChangeAttempts > 3) {
-                        console.log('⚡ Слишком много попыток сменить favicon - перезагружаем');
-                        window.location.reload();
-                    }
-                }
-            });
-        }, 300);
+            // Визуальный фидбэк
+            const btn = this;
+            btn.innerHTML = '✅ Сайт открывается...';
+            btn.classList.add('installed');
+            
+            setTimeout(() => {
+                btn.innerHTML = '🔗 Открыть Croissant77';
+                btn.classList.remove('installed');
+            }, 2000);
+        });
         
+        // 3. ЕСЛИ УЖЕ УСТАНОВЛЕН КАК PWA
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('📱 Запущен как PWA приложение');
+        }
+        
+        console.log('🎯 ИКОНКА: наша (icons/icon192.png)');
+        console.log('🚀 Готов к работе');
     </script>
 </body>
 </html>
