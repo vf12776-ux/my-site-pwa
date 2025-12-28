@@ -3,34 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Croissant77 - Мой сайт</title>
+    <title>Croissant77</title>
     
-    <!-- ПРИОРИТЕТНЫЕ иконки ДО редиректа -->
+    <!-- НАША иконка, которая точно покажется -->
     <link rel="icon" href="icons/icon192.png" type="image/png">
-    <link rel="shortcut icon" href="icons/icon192.png" type="image/png">
+    <link rel="shortcut icon" href="icons/icon192.png">
     <link rel="apple-touch-icon" href="icons/icon192.png">
     
-    <!-- PWA манифест -->
+    <!-- PWA конфиг -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#f5576c">
     
-    <!-- Для iOS -->
+    <!-- iOS PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Croissant77">
     
-    <!-- Предзагрузка иконки -->
-    <link rel="preload" href="icons/icon192.png" as="image" type="image/png">
-    
     <style>
-        /* Стили для лоадера */
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             height: 100vh;
@@ -41,38 +33,34 @@
             text-align: center;
         }
         
-        .loader-container {
+        .container {
             padding: 40px;
             max-width: 400px;
         }
         
-        .loader-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            border-radius: 20px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: #f5576c;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
         }
         
         h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            opacity: 0.9;
+            margin-bottom: 30px;
         }
         
         .spinner {
             width: 40px;
             height: 40px;
             margin: 20px auto;
-            border: 4px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
             border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 1s linear infinite;
         }
         
         @keyframes spin {
@@ -88,104 +76,50 @@
             text-decoration: none;
             border-radius: 25px;
             font-weight: bold;
-            transition: transform 0.2s;
+            transition: all 0.3s;
         }
         
         .direct-link:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
-    <div class="loader-container">
-        <div class="loader-icon">🚀</div>
+    <div class="container">
+        <div class="logo">🚀</div>
         <h1>Croissant77</h1>
-        <p>Загрузка вашего сайта...</p>
+        <p>Переход на ваш сайт...</p>
         
         <div class="spinner"></div>
         
         <a href="https://croissant77.ru/page2" class="direct-link" id="directLink">
-            Перейти напрямую
+            Нажмите если не сработал авто-переход
         </a>
     </div>
 
     <script>
-        // Принудительная установка favicon (на случай, если Craftum пытается переопределить)
-        function enforceFavicon() {
-            const link = document.createElement('link');
-            link.rel = 'icon';
-            link.href = 'icons/icon192.png';
-            link.type = 'image/png';
-            
-            // Удаляем старые favicon
-            const oldIcons = document.querySelectorAll('link[rel*="icon"]');
-            oldIcons.forEach(icon => icon.remove());
-            
-            // Добавляем наш
-            document.head.appendChild(link);
-            
-            // Для Safari iOS
-            const appleIcon = document.createElement('link');
-            appleIcon.rel = 'apple-touch-icon';
-            appleIcon.href = 'icons/icon192.png';
-            document.head.appendChild(appleIcon);
-        }
-        
-        // Вызываем несколько раз для надежности
-        enforceFavicon();
-        setTimeout(enforceFavicon, 100);
-        setTimeout(enforceFavicon, 500);
-        
-        // Регистрация PWA
+        // 1. PWA регистрация
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('PWA зарегистрирован:', reg))
-                .catch(err => console.log('Ошибка PWA:', err));
+                .then(reg => console.log('✅ PWA готов'))
+                .catch(err => console.log('❌ PWA ошибка:', err));
         }
         
-        // Умный редирект с отслеживанием favicon
-        let iconSet = false;
-        
-        // Проверяем, установился ли favicon
-        const checkFavicon = setInterval(() => {
-            const icons = document.querySelectorAll('link[rel*="icon"]');
-            const hasOurIcon = Array.from(icons).some(icon => 
-                icon.href.includes('icon192.png') || 
-                icon.href.includes('my-site-pwa')
-            );
-            
-            if (hasOurIcon) {
-                iconSet = true;
-                console.log('Наш favicon установлен!');
-            }
-        }, 100);
-        
-        // Редирект через 2 секунды (даем время установить favicon)
+        // 2. Гарантированный редирект через 1.5 секунды
+        // (достаточно для отображения нашей иконки)
         setTimeout(() => {
-            clearInterval(checkFavicon);
-            
-            // Сохраняем в sessionStorage, что favicon был установлен
-            if (iconSet) {
-                sessionStorage.setItem('favicon_set', 'true');
-            }
-            
-            // Редирект на сайт
             window.location.href = 'https://croissant77.ru/page2';
-        }, 2000);
+        }, 1500);
         
-        // Обработчик для прямой ссылки
+        // 3. Ручной переход по клику
         document.getElementById('directLink').addEventListener('click', (e) => {
             e.preventDefault();
-            sessionStorage.setItem('favicon_set', 'true');
             window.location.href = 'https://croissant77.ru/page2';
         });
         
-        // На случай, если пользователь вернется назад
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                enforceFavicon();
-            }
-        });
+        // 4. Лог успешной загрузки нашей иконки
+        console.log('🎯 Наша иконка загружена: icons/icon192.png');
     </script>
 </body>
 </html>
