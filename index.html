@@ -1,126 +1,39 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Croissant77 - Ваш сайт</title>
-    
-    <!-- НАША иконка ВСЕГДА -->
-    <link rel="icon" href="icons/icon192.png" type="image/png">
-    <link rel="apple-touch-icon" href="icons/icon192.png">
-    
-    <!-- PWA -->
+    <title>Croissant77</title>
+    <link rel="icon" href="icons/icon192.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#f5576c">
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            font-family: sans-serif;
             padding: 40px;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
         }
-        
-        h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-        
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        
-        #appLink {
+        a {
             display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 16px 32px;
-            border-radius: 50px;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
             text-decoration: none;
-            font-weight: bold;
+            border-radius: 8px;
             font-size: 18px;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
             margin-top: 20px;
-        }
-        
-        #appLink:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .installed {
-            background: #4CD964 !important;
-            color: white !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Croissant77</h1>
-        <p>Нажмите кнопку ниже для открытия сайта</p>
-        
-        <button id="appLink">
-            🔗 Открыть Croissant77
-        </button>
-        
-        <p style="margin-top: 30px; font-size: 14px; opacity: 0.7;">
-            Иконка приложения: наша<br>
-            Сайт откроется в браузере
-        </p>
-    </div>
-
+    <h1>Croissant77</h1>
+    <p>Нажмите кнопку для открытия сайта</p>
+    <a href="https://croissant77.ru/page2">Открыть сайт</a>
+    
     <script>
-        // 1. PWA РЕГИСТРАЦИЯ (наша иконка в манифесте)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(() => console.log('✅ PWA с нашей иконкой'))
-                .catch(err => console.log('❌ Ошибка PWA:', err));
+            navigator.serviceWorker.register('service-worker.js');
         }
-        
-        // 2. ОТКРЫТИЕ САЙТА ПО КЛИКУ
-        document.getElementById('appLink').addEventListener('click', function() {
-            // Открываем сайт в новой вкладке
-            window.open('https://croissant77.ru/page2', '_blank');
-            
-            // Визуальный фидбэк
-            const btn = this;
-            btn.innerHTML = '✅ Сайт открывается...';
-            btn.classList.add('installed');
-            
-            setTimeout(() => {
-                btn.innerHTML = '🔗 Открыть Croissant77';
-                btn.classList.remove('installed');
-            }, 2000);
-        });
-        
-        // 3. ЕСЛИ УЖЕ УСТАНОВЛЕН КАК PWA
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            console.log('📱 Запущен как PWA приложение');
-        }
-        
-        console.log('🎯 ИКОНКА: наша (icons/icon192.png)');
-        console.log('🚀 Готов к работе');
     </script>
 </body>
 </html>
