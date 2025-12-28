@@ -4,7 +4,7 @@
   "description": "Мой сайт на Croissant77",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f093fb",
   "theme_color": "#f5576c",
   "icons": [
     {
