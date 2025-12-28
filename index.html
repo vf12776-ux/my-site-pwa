@@ -3,24 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой сайт</title>
+    <title>Croissant77 - Мой сайт</title>
+    
+    <!-- PWA мета-теги -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4CAF50">
     <link rel="icon" href="icons/icon192.png">
-    <meta http-equiv="refresh" content="0.1; url=https://craftum.com/app/site/812639/page/1271491">
+    
+    <!-- Для iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon192.png">
+    
+    <!-- Автоматический редирект -->
+    <meta http-equiv="refresh" content="0.1; url=https://croissant77.ru/page2">
 </head>
 <body>
-    <div style="padding: 40px; text-align: center;">
-        <h2>Переход на сайт...</h2>
-        <a href="https://craftum.com/app/site/812639/page/1271491">Нажмите если не перешло</a>
+    <!-- Минимальная заглушка -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        text-align: center;
+        padding: 20px;
+    ">
+        <div>
+            <h1 style="font-size: 24px; margin-bottom: 20px;">Переход на сайт...</h1>
+            <p style="margin-bottom: 30px; opacity: 0.9;">Если переход не произошел автоматически:</p>
+            <a href="https://croissant77.ru/page2" 
+               style="
+                   display: inline-block;
+                   background: white;
+                   color: #f5576c;
+                   padding: 12px 30px;
+                   border-radius: 25px;
+                   text-decoration: none;
+                   font-weight: bold;
+                   font-size: 16px;
+               ">
+                Нажмите здесь
+            </a>
+        </div>
     </div>
+
+    <!-- PWA регистрация и редирект -->
     <script>
-        if("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js");
+        // Регистрация Service Worker для PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('PWA готов к работе'))
+                .catch(err => console.log('Ошибка PWA:', err));
         }
+        
+        // Гарантированный редирект
         setTimeout(() => {
-            window.location.href = "https://craftum.com/app/site/812639/page/1271491";
-        }, 200);
+            window.location.href = "https://croissant77.ru/page2";
+        }, 300);
+        
+        // Резервный редирект
+        document.addEventListener('click', () => {
+            window.location.href = "https://croissant77.ru/page2";
+        });
     </script>
 </body>
 </html>
