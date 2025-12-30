@@ -2,19 +2,20 @@
   "name": "Croissant77",
   "short_name": "Croissant77",
   "description": "Ваш сайт Croissant77",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#f5576c",
   "icons": [
     {
-      "src": "icons/icon192.png",
+      "src": "./icons/icon192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon512.png",
+      "src": "./icons/icon512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
